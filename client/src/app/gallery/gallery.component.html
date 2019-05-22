@@ -1,0 +1,19 @@
+<div class="container-big-img">
+  <div><img src='{{mainImg}}' /></div>
+</div>
+
+<div class="container-slider">
+  <div *ngIf='gallery?.length > 0'>
+    <div class="arrow-left">
+      <
+    </div> 
+    <div *ngFor='let imgInfo of gallery'>
+      {{imgInfo}}
+        <img class='img-thumb' [src]="getImgSrc(imgInfo)" />
+    </div>
+    <div></div>
+    <div class="arrow-right">
+      >
+    </div>
+  </div>
+</div>

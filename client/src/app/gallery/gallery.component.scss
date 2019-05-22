@@ -1,0 +1,27 @@
+.container-big-img {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+}
+
+.container-slider {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+
+    .arrow-left {
+        order: 0;
+        align-self: flex-start;
+        font-size: 5em;
+    }
+
+    .arrow-right {
+        order: 20;
+        align-self: flex-end;
+        font-size: 5em;
+    }
+}
+
+.img-thumb {
+    max-width: 150px;
+}
