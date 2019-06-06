@@ -1,5 +1,5 @@
 <div class="container-big-img">
-  <div><img src='{{mainImg}}' /></div>
+  <div *ngIf='mainImg !== null'><img [src]='{{mainImg}}' /></div>
 </div>
 
 <div class="container-slider">

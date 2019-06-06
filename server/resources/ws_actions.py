@@ -4,7 +4,7 @@ from tornado import websocket
 class ActionsWebSocket(websocket.WebSocketHandler):
     def open(self):
         print("WebSocket opened")
-        self.application.maj_gpio.subscribe(self.send_action)
+        self.application.new_collage.subscribe(self.send_action)
 
     def check_origin(self, origin):
         return True
@@ -13,7 +13,8 @@ class ActionsWebSocket(websocket.WebSocketHandler):
         self.write_message(u"You said: " + message)
 
     def on_close(self):
+        self.application.new_collage.unsubscribe(self.send_action)
         print("WebSocket closed")
 
     def send_action(message):
-        pass
+        self.write_message({'img': message})

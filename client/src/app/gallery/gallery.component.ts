@@ -28,7 +28,8 @@ export class GalleryComponent implements OnInit {
           this.gallery = listimgs.gallery;
           console.log(this.gallery);
           if (this.gallery.length > 0) {
-            return this.galleryService.getOne(this.gallery[0].file);
+            //return this.galleryService.getOne(this.gallery[0].file);
+            this.mainImg = 'http://localhost/collage/' + this.gallery[0].file
           }
         }
         )
@@ -40,8 +41,8 @@ export class GalleryComponent implements OnInit {
   getImgSrc(imgInfo: Thumbnail) {
     console.log('get src', imgInfo)
     if (imgInfo) {
-      console.log('http://localhost:5002/api/' + imgInfo.file)
-      return 'http://localhost:5002/api/' + imgInfo.file;
+      console.log('http://localhost/thumbnails/' + imgInfo.file)
+      return 'http://localhost/thumbnails/' + imgInfo.file;
     } else {
       return '';
     }
