@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs/operators';
+import { retryWhen, share, map, delay } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { webSocket } from 'rxjs/webSocket';
 
 @Injectable({
   providedIn: 'root'
@@ -9,9 +10,21 @@ import { Observable } from 'rxjs';
 
 export class GalleryService {
   private url: string;
+  private ws_url: string;
+  private host: string;
+  private port: string;
+
+  // WS
+  readonly reload_time = 3000;
+  public messages: Observable<any>;
+  private ws: Subject<any>;
+  public onclose = new Subject();
 
   constructor(private http: HttpClient) { 
-    this.url = 'http://localhost:5002/api/';
+    this.host = 'localhost';
+    this.port = '5002';
+    this.url = `http://${this.host}:${this.port}/api/`;
+    this.ws_url = `ws://${this.host}:${this.port}/`;
   }
 
   getOne(imgName): Observable<any> {
@@ -38,4 +51,21 @@ export class GalleryService {
     );
   }
 
+  public connect(): Observable<any> {
+    this.ws = webSocket({
+      url: this.url + 'actions',
+      closeObserver: this.onclose
+    });
+    return this.messages = this.ws.pipe(retryWhen(errors => errors.pipe(delay(this.reload_time))), map(msg => msg), share(), );
+  }
+
+  send(msg: any) {
+    this.ws.next(JSON.stringify(msg));
+  }
+
+  public close() {
+    this.ws.complete();
+  }
+
 }
+

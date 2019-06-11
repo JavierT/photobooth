@@ -1,6 +1,7 @@
-import tornado
+from resources.h_base import BaseHandler
 
-class GalleryHandler(tornado.web.RequestHandler):
+
+class GalleryHandler(BaseHandler):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -10,4 +11,5 @@ class GalleryHandler(tornado.web.RequestHandler):
         self.set_header("Content-Type", "application/json")
 
     def get(self):
+        print('Request get for gallery!')
         self.write("Hello, world")

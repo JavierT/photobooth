@@ -63,4 +63,10 @@ class ControlGPIO():
 
     def btn_new_photo(self):
         return GPIO.input(self.btnPhoto)
+
+    def btn_left(self):
+        return GPIO.input(self.btnAzulBack)
+
+    def btn_right(self):
+        return GPIO.input(self.btnRojoNext)
         

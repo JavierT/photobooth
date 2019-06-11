@@ -1,3 +1,6 @@
+""" Resource for the flask server
+"""
+
 from flask_restful import Resource
 from flask import current_app as app
 from flask import Flask, send_file

@@ -19,15 +19,15 @@ class Collage():
             0: self.filter0,
             1: self.filter1,
             2: self.filter2,
-            3: self.filter0, # filter3 removed, too much noise
-            4: self.filter0, # filter4 removed, too yellow
+            3: self.filter0,  # filter3 removed, too much noise
+            4: self.filter0,  # filter4 removed, too yellow
             5: self.filter5
         }
         self.a_images = []
         self.new_im = Image.new('RGB', (width, heigth))
         self.margin = margin
-        self.thumbnail_width = (width-margin)//self.cols
-        self.thumbnail_height = (heigth-margin)//self.rows
+        self.thumbnail_width = (width - margin) // self.cols
+        self.thumbnail_height = (heigth - margin) // self.rows
         self.size = self.thumbnail_width, self.thumbnail_height
 
     def create(self, path, listofimages):
@@ -50,7 +50,7 @@ class Collage():
         out_image.save(self.path + "_"+image_name)
 
     def create_thumbnail(self, img_name):
-        im= Image.open(self.path_fullimage + img_name)
+        im = Image.open(self.path_fullimage + img_name)
         im.thumbnail(self.size)
         im.save(self.path_thumbnails + img_name)
 
@@ -83,15 +83,15 @@ class Collage():
     def bck_picts(self, listofimages):  
         # TODO! 
         for img in listofimages:
-            os.rename(self.path +img, self.path_bck +img )
-            os.remove(self.path +img)
-            os.remove(self.path + "_"+img)
+            os.rename(self.path + img, self.path_bck + img )
+            os.remove(self.path + img)
+            os.remove(self.path + "_"+ img)
         self.a_images = []  
 
     def clean(self):
         for img in self.a_images:
-            os.remove(self.path +img)
-            os.remove(self.path + "_"+img)
+            os.remove(self.path + img)
+            os.remove(self.path + "_"+ img)
         self.a_images = []
 
     def filter0(self, im):
