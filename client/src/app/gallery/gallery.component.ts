@@ -21,6 +21,8 @@ export class GalleryComponent implements OnInit, OnDestroy {
   gallery: Thumbnail[];
   mainImg: any;
   public wsActionsSubscription: Subscription;
+  imgCount = 0;
+  currentIndex = 0;
 
   constructor(private galleryService: GalleryService) {
    }
@@ -37,10 +39,17 @@ export class GalleryComponent implements OnInit, OnDestroy {
     }
   }
 
-  initialize() {
+  getAll() {
     this.galleryService.getAll().subscribe(list => {
-        console.log(list);
-      });
+      console.log(list);
+      this.imgCount = list.length;
+      this.currentIndex = this.imgCount - 1;
+      this.mainImg = this.gallery[this.currentIndex];
+    });
+  }
+
+  initialize() {
+    this.getAll();
     // this.galleryService.getAll().pipe(
     //     mergeMap((listimgs) => {
     //       this.gallery = listimgs.gallery;
@@ -62,6 +71,23 @@ export class GalleryComponent implements OnInit, OnDestroy {
         switch (message.s_action) {
           case Actions.NEW:
             console.log('action new');
+            this.getAll();
+            break;
+          case Actions.BACK:
+            console.log('action BACK');
+            this.currentIndex--;
+            if (this.currentIndex < 0) {
+              this.currentIndex = this.imgCount - 1;
+            }
+            this.mainImg = this.gallery[this.currentIndex];
+            break;
+          case Actions.NEXT:
+            this.currentIndex++;
+            if (this.currentIndex >= (this.imgCount)) {
+              this.currentIndex = 0;
+            }
+            this.mainImg = this.gallery[this.currentIndex];
+            console.log('action NEXT');
             break;
           default:
             break;
@@ -70,11 +96,22 @@ export class GalleryComponent implements OnInit, OnDestroy {
     );
   }
 
-  getImgSrc(imgInfo: Thumbnail) {
+  getMainImgSrc() {
+    console.log('get src', this.mainImg)
+    if (this.mainImg) {
+      console.log('http://localhost:5002/data/collages/' + this.mainImg.file)
+      return 'http://localhost:5002/data/collages' + this.mainImg.file;
+    } else {
+      return '';
+    }
+
+  }
+
+  getThumbnailImgSrc(imgInfo: Thumbnail) {
     console.log('get src', imgInfo)
     if (imgInfo) {
-      console.log('http://localhost/thumbnails/' + imgInfo.file)
-      return 'http://localhost/thumbnails/' + imgInfo.file;
+      console.log('http://localhost:5002/data/thumbnails/' + imgInfo.file)
+      return 'http://localhost:5002/data/thumbnails/' + imgInfo.file;
     } else {
       return '';
     }

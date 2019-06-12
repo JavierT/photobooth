@@ -14,6 +14,7 @@ from components.test_server import ControlGPIOTest, CameraTest
 from components.collage import Collage
 from resources.ws_actions import ActionsWebSocket
 from tornado.platform.asyncio import AnyThreadEventLoopPolicy
+from resources.h_base import BaseStaticFileHandler
 
 
 class TornadoApplication(tornado.web.Application):
@@ -23,7 +24,12 @@ class TornadoApplication(tornado.web.Application):
 
     def __init__(self):
         try:
-            self.main_path = os.path.dirname(__file__)
+            self.main_path = os.getcwd()
+            print('main path: {}'.format(self.main_path))
+            settings = {
+                "static_path": os.path.join(self.main_path, 'public'),
+                "xsrf_cookies": True,
+            }
             # initialize camera, gpio and so on
             self.camera = CameraTest()
             self.cGPIO = ControlGPIOTest()
@@ -37,7 +43,9 @@ class TornadoApplication(tornado.web.Application):
             loop2 = asyncio.new_event_loop()
             self.th_btns_input = threading.Thread(target=self.process_btn_action, args=[loop2, self.running])
             self.th_btns_input.start()
-            tornado.web.Application.__init__(self, url_patterns)
+            url_patterns.append((r"/data/(.*)/?", BaseStaticFileHandler, dict(path=settings['static_path'])))
+            print('urls: ', url_patterns)
+            tornado.web.Application.__init__(self, url_patterns, **settings)
             self.io_loop = tornado.ioloop.IOLoop.current()
         except Exception as e:
             print('exception in main, ', e)

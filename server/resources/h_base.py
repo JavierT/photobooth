@@ -1,15 +1,15 @@
 import logging as log
 import tornado
-#from tornado_cors import CorsMixin
+from tornado_cors import CorsMixin
 
 
-#class BaseHandler(CorsMixin, tornado.web.RequestHandler):
-class BaseHandler(tornado.web.RequestHandler):
+class BaseHandler(CorsMixin, tornado.web.RequestHandler):
+#class BaseHandler(tornado.web.RequestHandler):
 
-    # CORS_ORIGIN = "*"
-    # CORS_HEADERS = "Authorization,X-PINGOTHER,Origin,X-Requested-With,Content-Type,Accept"
-    # CORS_METHODS = "POST, GET, OPTIONS, PUT, DELETE, HEAD"
-    # CORS_EXPOSE_HEADERS = "Access-Control-Allow-Origin,Access-Control-Allow-Headers"
+    CORS_ORIGIN = "*"
+    CORS_HEADERS = "Authorization,X-PINGOTHER,Origin,X-Requested-With,Content-Type,Accept"
+    CORS_METHODS = "POST, GET, OPTIONS, PUT, DELETE, HEAD"
+    CORS_EXPOSE_HEADERS = "Access-Control-Allow-Origin,Access-Control-Allow-Headers"
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -37,12 +37,12 @@ class BaseHandler(tornado.web.RequestHandler):
         return djson
 
 
-class BaseStaticFileHandler(tornado.web.StaticFileHandler):
-    pass
+# class BaseStaticFileHandler(tornado.web.StaticFileHandler):
+#     pass
 
-# class BaseStaticFileHandler(CorsMixin, tornado.web.StaticFileHandler):
+class BaseStaticFileHandler(CorsMixin, tornado.web.StaticFileHandler):
 
-#     CORS_ORIGIN = "*"
-#     CORS_METHODS = "POST, PUT, GET, DELETE"
-#     CORS_HEADERS = "Authorization,X-PINGOTHER,Origin,X-Requested-With,Content-Type,Accept"
-#     CORS_EXPOSE_HEADERS = "Access-Control-Allow-Origin,Access-Control-Allow-Headers"
+    CORS_ORIGIN = "*"
+    CORS_METHODS = "POST, PUT, GET, DELETE"
+    CORS_HEADERS = "Authorization,X-PINGOTHER,Origin,X-Requested-With,Content-Type,Accept"
+    CORS_EXPOSE_HEADERS = "Access-Control-Allow-Origin,Access-Control-Allow-Headers"
