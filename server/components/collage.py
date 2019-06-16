@@ -36,7 +36,7 @@ class Collage():
         self.path = path
         for img in listofimages:
             self.create_effect(img)
-        self.create_collage()
+        return self.create_collage()
 
     def create_effect(self, image_name):
         im= Image.open(self.path + image_name)

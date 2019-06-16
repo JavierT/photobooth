@@ -52,8 +52,9 @@ export class GalleryService {
   }
 
   public connect(): Observable<any> {
+    console.log('trying to connect to ws');
     this.ws = webSocket({
-      url: this.url + 'actions',
+      url: this.ws_url + 'actions',
       closeObserver: this.onclose
     });
     return this.messages = this.ws.pipe(retryWhen(errors => errors.pipe(delay(this.reload_time))), map(msg => msg), share(), );

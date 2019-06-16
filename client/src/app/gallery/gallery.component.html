@@ -1,22 +1,23 @@
 <div class="container-big-img">
-  <div *ngIf='mainImg !== null'><img [src]='getMainImgSrc()' /></div>
+  <div *ngIf='mainImg !== null'>
+    <img class='img-center' [src]='getMainImgSrc()' />
+  </div>
 </div>
 
-<div class="container-slider">
-  <div *ngIf='gallery?.length > 0'>
+<div>
+  <div class="container-slider" *ngIf='gallery?.length > 0'>
     <div class="arrow-left">
       <
-    </div> 
-    <div *ngFor='let imgInfo of gallery'>
-      {{imgInfo}}
-        <img class='img-thumb' [src]="getImgSrc(imgInfo)" />
     </div>
+      <div *ngFor='let imgInfo of gallery'>
+          <img class='img-thumb' [src]="getThumbnailImgSrc(imgInfo)" />
+      </div>
     <div></div>
     <div class="arrow-right">
       >
     </div>
-    <div class="">
+    <!-- <div class="">
       En cours / En processo>
-    </div>
+    </div> -->
   </div>
 </div>

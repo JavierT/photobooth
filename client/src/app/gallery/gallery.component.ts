@@ -41,10 +41,13 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
   getAll() {
     this.galleryService.getAll().subscribe(list => {
-      console.log(list);
-      this.imgCount = list.length;
+      console.log(list.gallery);
+      this.gallery = list.gallery;
+      this.imgCount = this.gallery.length;
       this.currentIndex = this.imgCount - 1;
+      console.log('currentIndex,', this.currentIndex)
       this.mainImg = this.gallery[this.currentIndex];
+      console.log('mainimg,', this.mainImg)
     });
   }
 
@@ -67,8 +70,8 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
     this.wsActionsSubscription = this.galleryService.connect()
       .subscribe(message => {
-        console.log('ws message ', message);
-        switch (message.s_action) {
+        console.log('ws message ', message.action);
+        switch (message.action) {
           case Actions.NEW:
             console.log('action new');
             this.getAll();
@@ -100,7 +103,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
     console.log('get src', this.mainImg)
     if (this.mainImg) {
       console.log('http://localhost:5002/data/collages/' + this.mainImg.file)
-      return 'http://localhost:5002/data/collages' + this.mainImg.file;
+      return 'http://localhost:5002/data/collages/' + this.mainImg.file;
     } else {
       return '';
     }
