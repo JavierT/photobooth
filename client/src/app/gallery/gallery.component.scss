@@ -11,13 +11,13 @@
 
     .arrow-left {
         order: 0;
-        align-self: flex-start;
+        align-self: center;
         font-size: 5em;
     }
 
     .arrow-right {
         order: 20;
-        align-self: flex-end;
+        align-self: center;
         font-size: 5em;
     }
 }
@@ -28,4 +28,12 @@
 
 .img-center {
     max-width: 720px;
+}
+
+.thumbnails {
+    background-color: #deeffd;
+    padding: 1em;
+    border-radius: 2em;
+    box-shadow: 0.2em 0.2em #d0e4f5;
+    margin: 1em;
 }
