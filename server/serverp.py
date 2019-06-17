@@ -8,9 +8,9 @@ from tornado.options import options
 import threading
 from resources import url_patterns
 from utils.observer import Subject
-#from components.control_gpio import ControlGPIO
-#from components.camera import Camera
-from components.test_server import ControlGPIOTest, CameraTest
+from components.control_gpio import ControlGPIO
+from components.camera import Camera
+# from components.test_server import ControlGPIOTest, CameraTest
 from components.collage import Collage
 from resources.ws_actions import ActionsWebSocket
 from tornado.platform.asyncio import AnyThreadEventLoopPolicy
@@ -31,15 +31,15 @@ class TornadoApplication(tornado.web.Application):
                 "xsrf_cookies": True,
             }
             # initialize camera, gpio and so on
-            self.camera = CameraTest()
-            self.cGPIO = ControlGPIOTest()
+            self.camera = Camera()
+            self.cGPIO = ControlGPIO()
             self.collage = Collage(1024, 720, 20)
             self.new_collage = Subject(None)
             self.action = Subject(None)
             self.running = threading.Event()
             loop1 = asyncio.new_event_loop()
             self.th_wait_and_capture = threading.Thread(target=self.wait_and_capture, args=[loop1, self.running])
-            # self.th_wait_and_capture.start()
+            self.th_wait_and_capture.start()
             loop2 = asyncio.new_event_loop()
             self.th_btns_input = threading.Thread(target=self.process_btn_action, args=[loop2, self.running])
             self.th_btns_input.start()
@@ -65,18 +65,20 @@ class TornadoApplication(tornado.web.Application):
 
     def process_btn_action(self, loop, running_cond):
         asyncio.set_event_loop(loop)
-        while not running_cond.is_set():
-            btn_reset = self.cGPIO.btn_new_round()
 
+        while not running_cond.is_set():
+            #btn_reset = self.cGPIO.btn_new_round()
+            btn_left = False
+            btn_right = False
             btn_left = self.cGPIO.btn_left()
             btn_right = self.cGPIO.btn_right()
-            if btn_reset:
-                print('sending action NEW')
-                self.new_collage.next(ActionsWebSocket.NEW)
-            elif btn_left:
+            #if btn_reset:
+            #    print('sending action NEW')
+            #    self.new_collage.next(ActionsWebSocket.NEW)
+            if not btn_left:
                 print('sending action NEXT')
                 self.action.next(ActionsWebSocket.NEXT)
-            elif btn_right:
+            elif not btn_right:
                 print('sending action BACK')
                 self.action.next(ActionsWebSocket.BACK)
             time.sleep(2)

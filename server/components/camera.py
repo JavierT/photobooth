@@ -8,7 +8,7 @@ class Camera():
         self.camera = PiCamera()
 
     def prepare(self):
-        self.camera.start_preview()
+        # self.camera.start_preview()
         time.sleep(3)
         print('ready!')
         return self.path

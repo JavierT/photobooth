@@ -6,7 +6,8 @@ from tornado import gen
 class ImgHandler(BaseHandler):
 
     def get(self, image_name):
-        path = self.static_url("collages/"+ image_name)
+        # path = self.static_url("collages/"+ image_name)
+        path = "/var/www/photobooth/public/collages/"+ image_name
         print('path: ', path)
         self.write({'url': path})
 
@@ -23,7 +24,8 @@ class GalleryHandler(BaseHandler):
     # @gen.coroutine
     def get(self):
         try:
-            folder = self.application.main_path + '/public/collages/'
+            # folder = self.application.main_path + '/public/collages/'
+            folder = '/var/www/photobooth/public/collages/'
             print('current folder {}'.format(folder))
             imgs = []
             for file in os.listdir(folder):

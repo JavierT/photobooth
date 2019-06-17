@@ -1,6 +1,6 @@
 from PIL import Image
 import random
-from datetime import date
+import datetime
 import os
 
 #based on https://stackoverflow.com/questions/35438802/making-a-collage-in-pil
@@ -10,8 +10,8 @@ class Collage():
     cols = 2
     rows = 2
 
-    path_thumbnails = '/var/www/html/thumbnails/'
-    path_fullimage = '/var/www/html/collage/'
+    path_thumbnails = '/var/www/photobooth/public/thumbnails/'
+    path_fullimage = '/var/www/photobooth/public/collages/'
     path_photos = '/home/pi/photo_tmp/'
 
     def __init__(self, width, heigth, margin):
@@ -71,7 +71,7 @@ class Collage():
                 y += self.thumbnail_height + self.margin
             x += self.thumbnail_width 
             y = 0
-        now = date.now()
+        now = datetime.datetime.now()
         str_date = now.strftime("%d_%m_%y_%H_%M_%S")
         img_name =  str_date + '.jpg'
         print('saving image with name: ', img_name)
