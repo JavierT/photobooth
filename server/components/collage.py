@@ -26,9 +26,10 @@ class Collage():
         self.a_images = []
         self.new_im = Image.new('RGB', (width, heigth))
         self.margin = margin
-        self.thumbnail_width = (width - margin) // self.cols
-        self.thumbnail_height = (heigth - margin) // self.rows
+        self.thumbnail_width = (width - 4*margin) // self.cols
+        self.thumbnail_height = (heigth - 4*margin) // self.rows
         self.size = self.thumbnail_width, self.thumbnail_height
+        print('size of thumbnails is:', self.size)
 
     def create(self, path, listofimages):
         #listofimages=['Image1.jpg', 'Image2.jpg', 'Image3.jpg', 'Image4.jpg']
@@ -61,16 +62,16 @@ class Collage():
             im = Image.open(self.path + "_" + p)          
             ims.append(im)
         i = 0
-        x = 0
-        y = 0
+        x = self.margin
+        y = 2*self.margin
         for col in range(self.cols):
             for row in range(self.rows):
                 print(i, x, y)
                 self.new_im.paste(ims[i], (x, y))
                 i += 1
                 y += self.thumbnail_height + self.margin
-            x += self.thumbnail_width 
-            y = 0
+            x += self.thumbnail_width + 2*self.margin 
+            y = 2*self.margin
         now = datetime.datetime.now()
         str_date = now.strftime("%d_%m_%y_%H_%M_%S")
         img_name =  str_date + '.jpg'
