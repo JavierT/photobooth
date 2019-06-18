@@ -19,6 +19,7 @@ enum Actions {
 export class GalleryComponent implements OnInit, OnDestroy {
   serverData: any;
   gallery: Thumbnail[];
+  old: Thumbnail[];
   mainImg: any;
   public wsActionsSubscription: Subscription;
   imgCount = 0;
@@ -39,34 +40,36 @@ export class GalleryComponent implements OnInit, OnDestroy {
     }
   }
 
-  getAll() {
+  getAll(newimg=null) {
     this.galleryService.getAll().subscribe(list => {
       console.log(list.gallery);
       this.gallery = list.gallery;
       this.imgCount = this.gallery.length;
       this.currentIndex = this.imgCount - 1;
       console.log('currentIndex,', this.currentIndex)
-      this.mainImg = this.gallery[this.currentIndex];
+      if (newimg===null) {
+        this.mainImg = this.gallery[this.currentIndex];
+      } else {
+        this.set_img(newimg);
+      }
       console.log('mainimg,', this.mainImg)
     });
   }
 
+  set_img(imgname) {
+    this.gallery.forEach(element => {
+      if (element.file === imgname) {
+        this.mainImg = element;
+      }
+    });
+  }
+
+  selectMainImg(imgInfo) {
+    this.mainImg = imgInfo;
+  }
+
   initialize() {
     this.getAll();
-    // this.galleryService.getAll().pipe(
-    //     mergeMap((listimgs) => {
-    //       this.gallery = listimgs.gallery;
-    //       console.log(this.gallery);
-    //       if (this.gallery.length > 0) {
-    //         //return this.galleryService.getOne(this.gallery[0].file);
-    //         this.mainImg = 'http://localhost/collage/' + this.gallery[0].file
-    //       }
-    //     }
-    //     )
-    // ).subscribe(img => {
-    //   console.log('main image:', img);
-    //   this.mainImg = img; 
-    // });
 
     this.wsActionsSubscription = this.galleryService.connect()
       .subscribe(message => {
@@ -74,7 +77,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
         switch (message.action) {
           case Actions.NEW:
             console.log('action new');
-            this.getAll();
+            this.getAll(message.img);
             break;
           case Actions.BACK:
             console.log('action BACK');

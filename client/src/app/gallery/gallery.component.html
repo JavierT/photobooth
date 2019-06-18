@@ -15,7 +15,7 @@
     <div class="arrow-left">
       <
     </div>
-      <div *ngFor='let imgInfo of gallery'>
+      <div *ngFor='let imgInfo of gallery' (click)="selectMainImg(imgInfo)">
           <img class='img-thumb' [src]="getThumbnailImgSrc(imgInfo)" />
       </div>
     <div class="arrow-right">
