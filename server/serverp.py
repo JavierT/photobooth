@@ -94,7 +94,14 @@ class TornadoApplication(tornado.web.Application):
             btn_state = self.cGPIO.btn_new_round()
             if not btn_state and not self.capturing:
                 print('Starting new round!')
-                self.cGPIO.set_ready_led(False)
+                self.cGPIO.set_leds_to(True)
+                time.sleep(0.3)
+                self.cGPIO.set_leds_to(False)
+                time.sleep(0.3)
+                self.cGPIO.set_leds_to(True)
+                time.sleep(0.3)
+                self.cGPIO.set_leds_to(False)
+
                 self.capturing = True
                 self.start_new_round()
                 self.capturing = False
@@ -105,22 +112,26 @@ class TornadoApplication(tornado.web.Application):
     def start_new_round(self):
         a_images = []
         i = 0
+        self.cGPIO.set_ready_led(True)
+        print('Waiting for photobtn ')
         while i < 4:
             btn_state = self.cGPIO.btn_new_photo()
-            print('Waiting for photobtn ', btn_state)
             if not btn_state:
                 print('Starting new photo!')
+                self.cGPIO.set_ready_led(False)
                 self.cGPIO.turn_on_led(i, True)
                 a_images.append(self.camera.capture(i))
                 time.sleep(0.5)
                 i += 1
+                self.cGPIO.set_ready_led(True)
             time.sleep(.1)
-            
+        self.cGPIO.set_ready_led(False)
         print(a_images)
         imgname = self.collage.create(self.path, a_images)
-        time.sleep(2)
-        self.cGPIO.set_leds_to(False)
         self.new_collage.next(imgname)
+        time.sleep(.5)
+        self.cGPIO.set_leds_to(False)
+
         
 if __name__ == "__main__":
     try:
